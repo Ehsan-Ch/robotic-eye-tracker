@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robotic-eye-tracker"
+version = "1.0.0"
+description = "Pixel-driven object tracking and bounded pan-tilt control in MuJoCo"
+requires-python = ">=3.11"
+dependencies = ["mujoco==3.3.7", "numpy>=2,<3", "opencv-python-headless==5.0.0.93"]
+
+[project.optional-dependencies]
+video = ["pillow>=11,<13", "imageio>=2.35,<3", "imageio-ffmpeg==0.6.0"]
+
+[project.scripts]
+eye-evaluate = "eye_lab.evaluate:main"
+eye-report = "eye_lab.report:main"
+
+[tool.setuptools.packages.find]
+include = ["eye_lab*"]
+
+[tool.setuptools.package-data]
+eye_lab = ["*.xml", "*.html"]
