@@ -2,6 +2,8 @@
 
 A simulated pan-tilt robotic eye follows a moving red ball using RGB images and motor encoders. MuJoCo simulates the motors; OpenCV finds candidate objects; a motion filter and state machine handle tracking, short occlusions, and search.
 
+Custom run durations must be finite and in (0, 60] seconds. Runs cover the requested duration in 0.04-second steps, rounding up to at least one frame. The published 10-second trials remain 250 frames each. Timing validation was regression-tested during the October 2026 review; the published physics/rendering benchmark was not rerun during that review.
+
 ![Camera input, reference scene, and robotic eye](reports/preview.png)
 
 ## Watch the experiment

@@ -4,6 +4,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 from .controller import EyeController
+from .timing import frame_count
 
 WIDTH,HEIGHT,DT=320,240,.04
 SCENARIOS=('normal','occlusion','dim_light','fast_motion','lookalike')
@@ -54,9 +55,10 @@ class EyeSimulation:
         cam=mujoco.MjvCamera();cam.lookat[:]=[0,0,1.06];cam.distance=1.45;cam.azimuth=225;cam.elevation=-10
         self.renderer.disable_segmentation_rendering();self.renderer.update_scene(self.data,camera=cam);return self.renderer.render().copy()
     def run(self,scenario='normal',seed=7,seconds=10,mode='tracking',callback=None):
-        if scenario not in SCENARIOS or mode not in ('tracking','fixed') or not 0<seconds<=60:raise ValueError('Invalid simulation configuration.')
+        if scenario not in SCENARIOS or mode not in ('tracking','fixed'):raise ValueError('Invalid simulation configuration.')
+        frames = frame_count(seconds, DT)
         self.reset(seed);rows=[]
-        for frame in range(round(seconds/DT)):
+        for frame in range(frames):
             t=frame*DT;self.set_scene(t,scenario);rgb=self.render_rgb(scenario)
             result=self.controller.update(rgb,self.data.qpos.copy(),DT)
             # Ground truth is computed only after the controller has returned.
